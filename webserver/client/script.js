@@ -7,25 +7,26 @@ const initialMovies = [
         id: 1,
         title: "Inception",
         rating: 5,
-        image: ""
+        image: "../public/Inception.jpg"
+
     },
     {
         id: 2,
         title: "The Dark Knight",
         rating: 5,
-        image: ""
+        image: "../public/darkKnight.jpg"
     },
     {
         id: 3,
         title: "Interstellar",
         rating: 4,
-        image: ""
+        image: "../public/Interstaller.jpg"
     },
     {
         id: 4,
         title: "Avengers Endgame",
         rating: 4,
-        image: ""
+        image: "../public/Endgame.jpg"
     }
 ];
 
