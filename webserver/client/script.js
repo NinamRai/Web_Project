@@ -39,14 +39,16 @@ function MovieApp() {
 
     // Load movies when app starts
     useEffect(() => {
-        const saved = localStorage.getItem('movies');
-        if (saved) {
-            setMovies(JSON.parse(saved));
-        } else {
-            // Load initial movies if nothing saved
-            setMovies(initialMovies);
-        }
-    }, []);
+  fetch("http://localhost:5000/movies")
+    .then(res => res.json())
+    .then(dbMovies => {
+        // Combine initialMovies + DB movies
+        setMovies([...initialMovies, ...dbMovies]);
+    })
+    .catch(err => console.error(err));
+}, []);
+
+
 
     // Save movies whenever they change
     useEffect(() => {
@@ -74,23 +76,20 @@ function MovieApp() {
     }
 
     // Save movie (add or update)
-    function saveMovie(movieData) {
-        if (editMovie) {
-            // Update existing movie
-            const updated = movies.map(m => 
-                m.id === editMovie.id ? { ...movieData, id: editMovie.id } : m
-            );
-            setMovies(updated);
-        } else {
-            // Add new movie
-            const newMovie = {
-                ...movieData,
-                id: Date.now()
-            };
-            setMovies([...movies, newMovie]);
-        }
-        closeForm();
-    }
+function saveMovie(movieData) {
+    fetch("http://localhost:5000/movies", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(movieData)
+    })
+    .then(res => res.json())
+    .then(newMovie => {
+        setMovies([...movies, newMovie]); // Add new movie returned from backend
+        closeForm(); // close form after saving
+    })
+    .catch(err => console.error("Error adding movie:", err));
+}
+
 
     // Delete movie
     function deleteMovie(id) {
